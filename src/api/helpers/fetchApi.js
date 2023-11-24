@@ -1,40 +1,38 @@
-// const apiUrl = `${process.env.REACT_APP_URL}`;
-import fetch from 'node-fetch';
-const apiUrl = `https://fa-evdm-saasfaprod1.fa.ocs.oraclecloud.com/`;
-// const bearerToken = Cookies.get("token_bizops");
-// const base64 = Buffer.from(
-//     `mpisysadmin:mpi12345`
-// ).toString('base64');
+import fetch from "node-fetch";
 
-export async function makeHttpRequest(url, method, headers, body = null) {
+const GOOGLE_SHEETS_API = "https://sheets.googleapis.com/";
+const makeHttpRequestOauth2 = async (
+  url,
+  method,
+  headers,
+  body = null,
+  valueInputOption
+) => {
   try {
-    const response = await fetch(apiUrl + url, {
+    const apiUrl = new URL(GOOGLE_SHEETS_API + url);
+    apiUrl.searchParams.append("valueInputOption", valueInputOption);
+    const response = await fetch(apiUrl.href, {
       method: method,
       headers: {
         ...headers,
         "Content-Type": "application/json",
-        Authorization: `Bearer ${bearerToken}`,
-        // Authorization: `Basic ${base64}`,
       },
       body: body ? JSON.stringify(body) : null,
       redirect: "follow",
     });
-
-    //   console.log(response);
-
-    if (response.status != '204') {
-      throw new Error("Network response was not ok");
+    if (!response.ok) {
+      return {
+        status: false,
+        statusCode: response.status,
+        message: response.statusText,
+      };
     }
-
-    const data = {
-        status: "true",
-        message: "Delete Sukses"
-    };
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error("An error occurred", error);
     throw error;
   }
-}
+};
 
-
+export { makeHttpRequestOauth2 };

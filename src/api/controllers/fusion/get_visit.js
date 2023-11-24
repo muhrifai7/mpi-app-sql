@@ -3,7 +3,7 @@ import mssql from "mssql";
 import { configSqlServer, getPoolToSimpi } from "../../../config/db.js";
 
 // Insert to table rayon Db ke simpe_test
-const importDataVisitToGoogleSheet = async () => {
+export default async () => {
   const batchSize = 1000;
   await mssql.connect(configSqlServer);
   // select data rayon from sql
@@ -16,7 +16,6 @@ const importDataVisitToGoogleSheet = async () => {
     const result = await mssql.query(query);
 
     const data = result.recordset;
-    
   } catch (error) {
     console.error("Error executing query:", error);
   }
