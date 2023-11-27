@@ -1,0 +1,43 @@
+version: '3'
+
+################################################################################
+# SERVICES
+################################################################################
+services:
+
+  # ------------------------------------------------------------
+  # node js
+  # ------------------------------------------------------------
+  node_mpi_app_sql:
+    container_name: mpi-app-sql
+    # image: node-docker
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      command: node run dev
+    ports:
+      - "80:3002"
+    depends_on:
+      - sql_server
+    environment:
+      SQL_SERVER_HOST: sql_server
+      SQL_SERVER_PORT: 1433
+      SQL_SERVER_USER: sa
+      SQL_SERVER_PASSWORD: P@ssw0rd
+      SQL_SERVER_DATABASE: master
+
+  # SQL Server service
+  sql_server:
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      SA_PASSWORD: P@ssw0rd
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./sql-server-data:/var/opt/mssql
+    command: ["/bin/bash", "-c", "/app/init-db.sh"]
+
+################################################################################
+# NETWORK
+################################################################################
