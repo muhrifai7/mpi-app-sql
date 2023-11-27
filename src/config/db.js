@@ -65,16 +65,14 @@ export async function getPoolToSimpiTest() {
 }
 
 export const configSqlServerLocal = {
-  user: "sa",
-  password: "P@ssw0rd",
-  server: "localhost",
-  database: "master", // Replace with the actual name of your database
-  dialect: "mssql",
+  user: process.env.DB_USER || 'sa',
+  password: process.env.DB_PASSWORD || 'P@ssw0rd',
+  server: process.env.DB_SERVER || 'mpi-app-sql-sql-server-1',
+  database: process.env.DB_DATABASE || 'master',
   options: {
-    // encrypt: true, // for Azure
-    // enableArithAbort: true,
-    trustServerCertificate: true, // For development purposes only. Set to true for self-signed certificates in development environment.
+    trustServerCertificate: true, 
   },
+
 };
 
 export const configSqlServer = {
@@ -86,3 +84,5 @@ export const configSqlServer = {
     trustServerCertificate: true, // For development purposes only. Set to true for self-signed certificates in development environment.
   },
 };
+
+

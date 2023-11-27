@@ -1,43 +1,30 @@
-version: '3'
+version: '3.8'
 
-################################################################################
-# SERVICES
-################################################################################
 services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: "P@ssw0rd"
+      ACCEPT_EULA: "Y"
+      MSSQL_DATABASE: MPI_PROD_NEW
+    ports:
+      - "1433:1433"
 
-  # ------------------------------------------------------------
-  # node js
-  # ------------------------------------------------------------
-  node_mpi_app_sql:
-    container_name: mpi-app-sql
-    # image: node-docker
+  node-app:
     build:
       context: .
       dockerfile: docker/Dockerfile
-      command: node run dev
-    ports:
-      - "80:3002"
     depends_on:
-      - sql_server
-    environment:
-      SQL_SERVER_HOST: sql_server
-      SQL_SERVER_PORT: 1433
-      SQL_SERVER_USER: sa
-      SQL_SERVER_PASSWORD: P@ssw0rd
-      SQL_SERVER_DATABASE: master
-
-  # SQL Server service
-  sql_server:
-    image: mcr.microsoft.com/mssql/server:latest
-    environment:
-      SA_PASSWORD: P@ssw0rd
-      ACCEPT_EULA: Y
+      - sql-server
     ports:
-      - "1433:1433"
+      - "3000:3000"
     volumes:
-      - ./sql-server-data:/var/opt/mssql
-    command: ["/bin/bash", "-c", "/app/init-db.sh"]
+      - ./src:/usr/src/app/src
+    command: npm run dev
+    environment:
+      DB_USER: "sa"
+      DB_PASSWORD: "P@ssw0rd"
+      DB_SERVER: "172.19.0.2"
+      DB_DATABASE: "master"
 
-################################################################################
-# NETWORK
-################################################################################
+

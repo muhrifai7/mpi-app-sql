@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3000;
 
 // Middleware to parse incoming JSON data
 app.use(
@@ -14,8 +14,15 @@ app.use(
 );
 app.use(express.json());
 
+
+app.get("/", (req, res) => {
+  res.send("Hello, this is the base route!");
+});
+
+
+
 app.use("/api", routes);
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on prod :${port}`);
+  console.log(`Server is running on port :${port}`);
 });
