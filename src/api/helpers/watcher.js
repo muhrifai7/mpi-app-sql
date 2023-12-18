@@ -1,7 +1,7 @@
 import fs from "fs";
 import readline from "readline";
 import mssql from "mssql";
-
+import path from "path";
 import chokidar from "chokidar";
 
 import { configSqlServerLocal } from "../../config/db.js";
@@ -13,9 +13,10 @@ const root_folder = process.env.SOURCE_FILE;
 const upload_path = process.env.UPLOAD_PATH;
 const processed_path = process.env.PROCCESSED_FILE;
 const failed_path = process.env.FAILED_FILE;
-const source_folder = `${root_folder}/${upload_path}`;
-const success_folder = `${root_folder}/${processed_path}`;
-const failed_folder = `${root_folder}/${failed_path}`;
+const source_folder = path.join(root_folder, upload_path);
+const success_folder = path.join(root_folder, processed_path);
+const failed_folder = path.join(root_folder, failed_path);
+
 const ROWS_PER_BATCH = 30;
 const watcher = chokidar.watch(`${source_folder}`, {
   persistent: true,
