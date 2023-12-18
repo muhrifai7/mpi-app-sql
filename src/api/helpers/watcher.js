@@ -27,16 +27,16 @@ watcher.on("ready", () => {
   console.log(`Watcher is ready and scanning files on ${source_folder}`);
 });
 
-watcher.on("add", async (path) => {
-  const fileName = path.split("/").slice(-1)[0];
-  if (fileName.toUpperCase().indexOf("AR BALANCE_SFA") != -1) {
+watcher.on("add", async (filePath) => {
+  const fileName = path.basename(filePath);
+  if (fileName.toUpperCase().indexOf("AR BALANCE_SFA") !== -1) {
     setTimeout(async () => {
       try {
         console.log("Reading balance sfa sales started");
         let rowCount = 0;
         let batchRows = [];
 
-        const readStream = fs.createReadStream(path, {
+        const readStream = fs.createReadStream(filePath, {
           encoding: "utf8",
           highWaterMark: 256 * 1024, // Set the buffer size to 64 KB (adjust as needed)
         });
@@ -67,7 +67,7 @@ watcher.on("add", async (path) => {
             await truncateDataBalanceSfa(batchRows, table, mssql);
           }
           const newFileName = `${success_folder}/${fileName}`;
-          fs.rename(path, newFileName, (err) => {
+          fs.rename(filePath, newFileName, (err) => {
             if (err) {
               console.log(`Error while renaming after insert: ${err.message}`);
             } else {
@@ -82,7 +82,7 @@ watcher.on("add", async (path) => {
         rl.on("error", (err) => {
           console.error("Error while reading the file:", err);
           const newFileName = `${failed_folder}/${fileName}`;
-          fs.renameSync(path, newFileName, (err) => {
+          fs.renameSync(filePath, newFileName, (err) => {
             if (err) {
               console.log(`Error while moving Failed file : ${err.message}`);
             } else {
@@ -95,7 +95,7 @@ watcher.on("add", async (path) => {
       } catch (error) {
         console.log(error, "error'");
         const newFileName = `${failed_folder}/${fileName}`;
-        fs.renameSync(path, newFileName, (err) => {
+        fs.renameSync(filePath, newFileName, (err) => {
           if (err) {
             console.log(`Error while moving Failed file : ${err.message}`);
           } else {
