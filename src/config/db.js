@@ -78,7 +78,7 @@ export const configSqlServer = {
   user: "sa",
   password: "P@ssw0rd.1",
   server: "172.16.1.22",
-  database: "MPI_PROD_NEW", // Replace with the actual name of your database
+  database: "MPI_PROD_NEW",
   options: {
     trustServerCertificate: true, // For development purposes only. Set to true for self-signed certificates in development environment.
   },
