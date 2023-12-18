@@ -65,14 +65,13 @@ export async function getPoolToSimpiTest() {
 }
 
 export const configSqlServerLocal = {
-  user: process.env.DB_USER || 'sa',
-  password: process.env.DB_PASSWORD || 'P@ssw0rd',
-  server: process.env.DB_SERVER || 'mpi-app-sql-sql-server-1',
-  database: process.env.DB_DATABASE || 'master',
+  user: process.env.SQL_DB_USER || "sa",
+  password: process.env.SQL_DB_PASS || "P@ssw0rd",
+  server: process.env.DB_SERVER || "sql-server",
+  database: process.env.DB_DATABASE || "master",
   options: {
-    trustServerCertificate: true, 
+    trustServerCertificate: true,
   },
-
 };
 
 export const configSqlServer = {
@@ -84,5 +83,3 @@ export const configSqlServer = {
     trustServerCertificate: true, // For development purposes only. Set to true for self-signed certificates in development environment.
   },
 };
-
-
