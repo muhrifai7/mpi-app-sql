@@ -66,8 +66,8 @@ export async function getPoolToSimpiTest() {
 
 export const configSqlServerLocal = {
   user: "sa",
-  password: "v6khN0n2KO14g4CgYK",
-  server: "localhost",
+  password: "P@ssw0rd.1",
+  server: "172.16.1.22",
   database: "DEV_MPI_TRAINING", // Replace with the actual name of your database
   options: {
     trustServerCertificate: true, // For development purposes only. Set to true for self-signed certificates in development environment.

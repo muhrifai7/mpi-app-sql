@@ -44,18 +44,15 @@ watcher.on("add", async (filePath) => {
           input: readStream,
           crlfDelay: Infinity, // To handle CRLF line endings on Windows
         });
-        console.log(rl, "rl");
 
         const table = "Oracle_CustomerAR_Staging";
-        const pool = new mssql.ConnectionPool(configSqlServerLocal);
-        await pool.connect();
         // await deleteAllDataBalanceSfa(table, pool);
         rl.on("line", async (line) => {
           rowCount++;
           const data = parseCSVLine(line);
           batchRows.push(data);
           if (rowCount === ROWS_PER_BATCH) {
-            await truncateDataBalanceSfa(batchRows, table, pool);
+            await truncateDataBalanceSfa(batchRows, table);
             batchRows = [];
             rowCount = 0;
           }
@@ -64,7 +61,7 @@ watcher.on("add", async (filePath) => {
         rl.on("close", async () => {
           if (batchRows.length > 0) {
             // await insertBulkData(batchRows, table);
-            await truncateDataBalanceSfa(batchRows, table, mssql);
+            await truncateDataBalanceSfa(batchRows, table);
           }
           const newFileName = `${success_folder}/${fileName}`;
           fs.rename(filePath, newFileName, (err) => {

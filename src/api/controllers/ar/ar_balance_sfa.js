@@ -1,6 +1,10 @@
 import moment from "moment";
-const truncateDataBalanceSfa = async (data, table, pool) => {
+import mssql from "mssql";
+import { configSqlServerLocal } from "../../../config/db.js";
+
+const truncateDataBalanceSfa = async (data, table) => {
   try {
+    await mssql.connect(configSqlServerLocal);
     const formattedData = data.map((row) => ({
       szDocId: row.TRANSACTION_NUMBER,
       dtmDate: row.TRANSACTION_DATE,
@@ -37,7 +41,7 @@ const truncateDataBalanceSfa = async (data, table, pool) => {
           .join(",\n")};
       `;
 
-    const result = await pool.request().query(sqlQuery);
+    const result = await mssql.query(sqlQuery);
 
     console.log("Data inserted successfully:", result);
   } catch (err) {
