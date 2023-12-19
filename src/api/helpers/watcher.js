@@ -10,7 +10,6 @@ import { deleteAllDataBalanceSfa } from "../controllers/ar/delete_ar.js";
 import { parseCSVLine } from "./parseCsvAr.js";
 
 const root_folder = process.env.SOURCE_FILE;
-console.log(root_folder,"root_folder");
 const upload_path = process.env.UPLOAD_PATH;
 const processed_path = process.env.PROCCESSED_FILE;
 const failed_path = process.env.FAILED_FILE;
@@ -19,13 +18,13 @@ const success_folder = path.join(root_folder, processed_path);
 const failed_folder = path.join(root_folder, failed_path);
 
 const ROWS_PER_BATCH = 30;
-const watcher = chokidar.watch("C:\\FTP\\node\\upload", {
+const watcher = chokidar.watch(source_folder, {
   persistent: true,
   ignoreInitial: false,
 });
 
 watcher.on("ready", () => {
-  console.log(`Watcher is ready and scanning files on C:\\FTP\\node\\upload`);
+  console.log(`Watcher is ready and scanning files on ${source_folder}`);
 });
 
 watcher.on("add", async (filePath) => {
