@@ -49,7 +49,7 @@ watcher.on("add", async (filePath) => {
         const table = "Oracle_CustomerAR_Staging";
         const pool = new mssql.ConnectionPool(configSqlServerLocal);
         await pool.connect();
-        await deleteAllDataBalanceSfa(table, pool);
+        // await deleteAllDataBalanceSfa(table, pool);
         rl.on("line", async (line) => {
           rowCount++;
           const data = parseCSVLine(line);
