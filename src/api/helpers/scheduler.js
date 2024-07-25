@@ -18,6 +18,7 @@ const importDataRayonToSimpi = async () => {
                 INNER JOIN DMS_SD_RouteItem b ON a.szId = b.szId
                 LEFT JOIN DMS_PI_Employee c ON a.szEmployeeId = c.szId
                 LEFT JOIN DMS_AR_Customer d ON b.szCustomerId = d.szId
+                WHERE a.szRouteType IN('TKO', 'TOCOL')
                 ORDER BY a.szId;
                 `;
 
@@ -283,7 +284,7 @@ const importDataPriceListToSimpi = async () => {
   }
 };
 
-schedule.scheduleJob("0 3 * * *", async () => {
+schedule.scheduleJob("* 3 * * *", async () => {
   console.log("schedule run every day at 3 am start");
   const resRayon = await importDataRayonToSimpi();
   const resPriceList = await importDataPriceListToSimpi();
