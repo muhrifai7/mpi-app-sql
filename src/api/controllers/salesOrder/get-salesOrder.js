@@ -3,7 +3,7 @@ import { configSqlServer } from "../../../config/db.js";
 
 export default async (req, res) => {
   await mssql.connect(configSqlServer);
-  // select data rayon from sql
+  const { nomor_surat } = req.params;
   const query = `SELECT
                 A.szBranchId
                 , c.szName as szBranchNm
@@ -53,13 +53,11 @@ export default async (req, res) => {
                 WHERE
                 A.szBranchId = 'SOL'
                 --and A.szDocId = '131324006095'
-                and j.szPromoId = 'ccg-setyadi/REQ24072024#00660';
+                and j.szPromoId = ${nomor_surat};
                     `;
   try {
     const result = await mssql.query(query);
-
     const data = result.recordset;
-
     return res.json({ status: true, data: data });
   } catch (error) {
     console.error("Error retrieving outlet:", error.message);

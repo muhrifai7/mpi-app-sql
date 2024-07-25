@@ -5,6 +5,6 @@ const router = Router();
 // AUTH
 // EDIT
 
-router.get("/", getSalesOrder);
+router.get("/:nomor_surat", getSalesOrder);
 
 export default router;
