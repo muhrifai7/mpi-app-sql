@@ -2,17 +2,16 @@ import mssql from "mssql";
 import { configSqlServer } from "../../../config/db.js";
 
 export default async (req, res) => {
-    const batchSize = 1000;
-    await mssql.connect(configSqlServer);
-    // select data rayon from sql
-    const query = `SELECT 
+  await mssql.connect(configSqlServer);
+  // select data rayon from sql
+  const query = `SELECT
                 A.szBranchId
                 , c.szName as szBranchNm
                 , a.szEmployeeId
                 , d.szName AS szEmployeeNm
                 , a.szCustomerId
                 , h.szName as szCustomerNm
-                , A.szDocId 
+                , A.szDocId
                 , A.dtmDoc
                 , b.szProductId
                 , e.szName as szProductNm
@@ -40,7 +39,7 @@ export default async (req, res) => {
                 , isnull(j.szPromoId, '') as fdk
                 , a.szDocStatus
                 , a.dtmCreated
-                FROM 
+                FROM
                 DMS_SD_DocSo as a
                 LEFT JOIN DMS_SD_DocSoItem as b on b.szDocId = a.szDocId
                 LEFT JOIN DMS_SM_Branch as c on c.szId = a.szBranchId
