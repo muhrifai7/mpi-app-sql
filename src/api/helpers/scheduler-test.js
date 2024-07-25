@@ -1,5 +1,7 @@
 import mssql from "mssql";
 import { configSqlServer, getPoolToSimpiTest } from "../../config/db.js";
+import { batchUpdateValues } from "../vendor/google/spreadsheets/batchUpdateValues.js";
+import HelpersSheet from "./HelpersSheet.js";
 
 // Insert to table rayon Db ke simpe_test
 const importDataRayonToSimpi = async () => {
@@ -280,8 +282,26 @@ const importDataPriceListToSimpi = async () => {
     console.error("Error executing query:", error);
   }
 };
+const schedulervisitSfa = async () => {
+  const sheetsHelper = new HelpersSheet();
+  const spreadsheetId = "1xc0tkt1ww6rjQdEwe_coAIXVJIH0S_gUQj0D_FBvav4"; //await sheetsHelper.createTestSpreadsheet();
+  const service = sheetsHelper.sheetsService;
+
+  const result = await batchUpdateValues(
+    spreadsheetId,
+    service,
+    "A1:B2",
+    "USER_ENTERED",
+    [
+      ["test1", "test2"],
+      ["test3", "test4"],
+    ]
+  );
+  const responses = result.data.responses;
+  return responses;
+};
 
 // const resRayon = await importDataRayonToSimpi();
-const resPriceList = await importDataPriceListToSimpi();
-
-console.log("resRayon", resPriceList);
+// const resPriceList = await importDataPriceListToSimpi();
+const resschedulervisitSfa = await schedulervisitSfa();
+console.log(resschedulervisitSfa, "resschedulervisitSfa");
